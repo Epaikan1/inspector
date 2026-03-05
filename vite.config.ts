@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { defineConfig } from "vite";
 
@@ -8,6 +9,7 @@ import { defineConfig } from "vite";
 const packageJson = JSON.parse(
   readFileSync(path.resolve(__dirname, "package.json"), "utf-8")
 );
+const require = createRequire(import.meta.url);
 
 export default defineConfig({
   base: "/inspector",
@@ -46,20 +48,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // Use require.resolve to get the actual module path from node_modules
-      // This works in both dev (with workspace links) and production
-      "mcp-use/react": path.resolve(
-        __dirname,
-        "../mcp-use/dist/src/react/index.js"
-      ),
-      "mcp-use/browser": path.resolve(
-        __dirname,
-        "../mcp-use/dist/src/browser.js"
-      ),
-      "mcp-use/utils": path.resolve(
-        __dirname,
-        "../mcp-use/dist/src/utils/index.js"
-      ),
+      // Resolve from installed package when running outside the monorepo
+      "mcp-use/react": require.resolve("mcp-use/react"),
+      "mcp-use/browser": require.resolve("mcp-use/browser"),
+      "mcp-use/utils": require.resolve("mcp-use/utils"),
       "posthog-node": path.resolve(
         __dirname,
         "./src/client/stubs/posthog-node.js"

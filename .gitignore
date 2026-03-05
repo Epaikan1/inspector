@@ -2,3 +2,18 @@
 /test-results/
 /playwright-report/
 /playwright/.cache/
+node_modules/.playwright-test/
+node_modules/
+# Logs  
+*.log
+logs/
+*.log.*
+# OS generated files
+.DS_Store
+Thumbs.db
+# IDE files
+.idea/
+.vscode/
+*.suo
+
+node_modules/
